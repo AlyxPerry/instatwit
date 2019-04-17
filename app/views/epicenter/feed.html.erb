@@ -1,0 +1,31 @@
+<h2>@<%= current_user.username %>'s Feed </h2>
+
+<%= render 'tweets/form.html.erb', tweet: @tweet %>
+
+<div class="container">
+<div class="row">
+		<% @following_tweets.each do |tweet| %>
+			<div class="col-md-3">
+				<div class="well card-body">
+				  
+				  	<%= image_tag tweet.image.url, size:200 %>
+				  <div class="row">
+				  	<div class="col-md-2">
+				  
+				    <%= image_tag tweet.user.avatar, size:40 %>
+				    </div>
+				    <div class="col-md-10">
+				    <h4> <%= tweet.user.name %></h4>
+				    <h4 class="card-title"> @<%= link_to tweet.user.username, show_user_path(id: tweet.user.id) %></h4>- 
+				    	<%= (time_ago_in_words(tweet.created_at) + '  ago') if Time.now - tweet.created_at < 86400 %>
+				    	<%= (tweet.created_at.strftime("%b %e")) if Time.now - tweet.created_at > 86400 %>
+					</div>
+				</div>
+				    <p class="card-text"> <%= tweet.message.html_safe %> </p>
+				    <%= link_to 'View', tweet %>
+				</div>
+			</div>
+			
+		<% end %>
+	</div>
+</div>

@@ -1,0 +1,42 @@
+
+<h1>@<%= @user.username %>'s Profile</h1>
+
+<div class="row">
+	<div class="col-md-2">
+		<p> <%= @user.name %> </p>
+		<p> <%= image_tag @user.avatar.url, size:150 %> </p>
+	</div>
+	<div class="col-md-3">	
+		<p> <%= @user.bio %> </p>
+		<p> <%= @user.location %> </p>
+		<p>Tweet count: <%= @user.tweets.count %> </p>
+		<p>Followers: <%= link_to @followers.count, followers_path(id: @user.id) %> </p>
+		<p>Following: <%= link_to @user.following.count, following_path(id: @user.id) %> </p>
+
+	</div>
+</div>
+<div>
+	<% if current_user.id != @user.id %>
+		<% if current_user.following.include?(@user.id) %>
+			<%= link_to 'Following', unfollow_path(id: @user.id), class: "btn btn-success", id:"unfollow_btn" %>
+		<% else %>
+			<%= link_to 'Follow', now_following_path(id: @user.id), class: "btn btn-success" %>
+		<% end %>
+	<% end %>
+
+
+</div>
+
+<% @user.tweets.each do |tweet| %>
+<div class="well">
+  <%= image_tag tweet.image.url, size:200 %>
+  <div class="card-body">
+    <%= image_tag tweet.user.avatar.url, size:25 %>
+    <h3 class="card-title"> <%= tweet.user.name %></h3>
+    <h4 class="card-title"> <%= link_to ("@" + tweet.user.username), show_user_path(id: tweet.user.id) %></h4>
+    <p class="card-text"> <%= tweet.message %> </p>
+    <%= link_to 'View', tweet %>
+  </div>
+</div>
+<% end %>
+
